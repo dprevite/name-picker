@@ -100,12 +100,9 @@ test.describe('Dark Mode Functionality', () => {
     const sidebar = page.locator('.w-80');
     await expect(sidebar).toHaveClass(/bg-card/);
 
-    // Check text uses CSS variables
-    const mainTitle = page.getByRole('heading', { name: 'Name Shuffle' });
-    await expect(mainTitle).toHaveClass(/text-foreground/);
-
-    const sidebarTitle = page.getByRole('heading', { name: 'Names' });
-    await expect(sidebarTitle).toHaveClass(/text-card-foreground/);
+    // Check that input field uses CSS variables since headings were removed
+    const nameInput = page.getByPlaceholder('Enter a name');
+    await expect(nameInput).toHaveClass(/bg-background/);
   });
 
   test('should maintain dark mode functionality with names persistence', async ({ page }) => {
@@ -193,7 +190,7 @@ test.describe('Dark Mode Functionality', () => {
 
     // Should show a selected name
     const selectedNames = ['Alice', 'Bob', 'Charlie'];
-    const selectedName = await page.locator('.text-3xl.font-bold').textContent();
+    const selectedName = await page.locator('.text-5xl.font-bold').textContent();
     expect(selectedNames).toContain(selectedName);
   });
 

@@ -53,12 +53,10 @@ describe('App Component', () => {
     document.documentElement.classList.remove('dark')
   })
 
-  it('renders the main title and initial state', () => {
+  it('renders the initial state', () => {
     localStorageMock.getItem.mockReturnValue(null)
     renderAppWithTheme()
-    
-    expect(screen.getByText('Name Shuffle')).toBeInTheDocument()
-    expect(screen.getByText('Names')).toBeInTheDocument()
+
     expect(screen.getByPlaceholderText('Enter a name')).toBeInTheDocument()
     expect(screen.getByText('No names added yet')).toBeInTheDocument()
     expect(screen.getByText('Press shuffle to pick a name!')).toBeInTheDocument()
@@ -231,7 +229,7 @@ describe('App Component', () => {
     expect(themeToggle).toBeInTheDocument()
   })
 
-  it('allows cycling through theme modes', async () => {
+  it('allows toggling between light and dark themes', async () => {
     const user = userEvent.setup()
     localStorageMock.getItem.mockImplementation((key) => {
       if (key === 'theme') return 'light'
@@ -247,9 +245,9 @@ describe('App Component', () => {
     await user.click(themeToggle)
     expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'dark')
 
-    // Should now show switch to system mode
-    const systemButton = screen.getByRole('button', { name: /switch to system mode/i })
-    expect(systemButton).toBeInTheDocument()
+    // Should now show switch to light mode
+    const lightButton = screen.getByRole('button', { name: /switch to light mode/i })
+    expect(lightButton).toBeInTheDocument()
   })
 
   it('applies dark mode classes when theme is dark', () => {
