@@ -12,6 +12,7 @@ export default {
         'bounce-in': 'bounceIn 0.6s ease-out',
         'fade-in': 'fadeIn 0.3s ease-in-out',
         'grow-circle': 'growCircle 0.8s ease-out forwards',
+        'bounce-and-grow': 'bounceAndGrow 0.8s ease-out forwards',
       },
       keyframes: {
         bounceIn: {
@@ -28,6 +29,12 @@ export default {
           '0%': { transform: 'scale(1)' },
           '60%': { transform: 'scale(1.4)' },
           '100%': { transform: 'scale(1.33)' },
+        },
+        bounceAndGrow: {
+          '0%': { transform: 'scale(0.3)', opacity: '0' },
+          '40%': { transform: 'scale(1.4)', opacity: '1' },
+          '70%': { transform: 'scale(1.15)' },
+          '100%': { transform: 'scale(1.33)', opacity: '1' },
         },
       },
     },

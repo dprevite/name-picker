@@ -168,13 +168,13 @@ function App() {
                 <p className="text-3xl md:text-4xl text-muted-foreground">Shuffling...</p>
               </div>
             ) : selectedPerson && showResult ? (
-              <div className="text-center animate-bounce-in">
+              <div className="text-center">
                 <div
-                  className={`w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 ${selectedPerson.color} rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto shadow-2xl animate-grow-circle`}
+                  className={`w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 ${selectedPerson.color} rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto shadow-2xl animate-bounce-and-grow`}
                 >
                   {selectedPerson.icon}
                 </div>
-                <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground">
+                <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground animate-bounce-in">
                   {selectedPerson.name}
                 </p>
               </div>
