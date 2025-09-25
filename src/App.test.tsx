@@ -189,9 +189,12 @@ describe('App Component', () => {
       { timeout: 3000 }
     )
 
-    // Should show the selected name
+    // Should show the selected name in the center display (large text)
     await waitFor(() => {
-      expect(screen.getByText('John')).toBeInTheDocument()
+      const selectedNameElement = screen.getByText('John', {
+        selector: 'p.text-5xl.font-bold'
+      })
+      expect(selectedNameElement).toBeInTheDocument()
     })
   })
 
