@@ -2,6 +2,7 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
+import { ThemeProvider } from './contexts/ThemeContext'
 
 // Mock localStorage
 const localStorageMock = {
@@ -19,17 +20,42 @@ Object.defineProperty(globalThis, 'crypto', {
   },
 })
 
+// Mock matchMedia for theme tests
+const mockMatchMedia = vi.fn()
+Object.defineProperty(window, 'matchMedia', {
+  value: mockMatchMedia,
+})
+
+function renderAppWithTheme() {
+  return render(
+    <ThemeProvider>
+      <App />
+    </ThemeProvider>
+  )
+}
+
 describe('App Component', () => {
   beforeEach(() => {
     localStorageMock.getItem.mockClear()
     localStorageMock.setItem.mockClear()
     localStorageMock.removeItem.mockClear()
     localStorageMock.clear.mockClear()
+    mockMatchMedia.mockClear()
+
+    // Default mock for matchMedia
+    mockMatchMedia.mockReturnValue({
+      matches: false,
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    })
+
+    // Clear document classes
+    document.documentElement.classList.remove('dark')
   })
 
   it('renders the main title and initial state', () => {
     localStorageMock.getItem.mockReturnValue(null)
-    render(<App />)
+    renderAppWithTheme()
     
     expect(screen.getByText('Name Shuffle')).toBeInTheDocument()
     expect(screen.getByText('Names')).toBeInTheDocument()
@@ -45,7 +71,7 @@ describe('App Component', () => {
     ]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     
-    render(<App />)
+    renderAppWithTheme()
     
     expect(screen.getByText('John')).toBeInTheDocument()
     expect(screen.getByText('Jane')).toBeInTheDocument()
@@ -55,7 +81,7 @@ describe('App Component', () => {
   it('adds a new name when typing and pressing Enter', async () => {
     localStorageMock.getItem.mockReturnValue(null)
     const user = userEvent.setup()
-    render(<App />)
+    renderAppWithTheme()
     
     const input = screen.getByPlaceholderText('Enter a name')
     await user.type(input, 'Alice')
@@ -69,7 +95,7 @@ describe('App Component', () => {
   it('adds a new name when clicking the plus button', async () => {
     localStorageMock.getItem.mockReturnValue(null)
     const user = userEvent.setup()
-    render(<App />)
+    renderAppWithTheme()
     
     const input = screen.getByPlaceholderText('Enter a name')
     const addButton = screen.getByRole('button', { name: /plus/i })
@@ -84,7 +110,7 @@ describe('App Component', () => {
   it('does not add empty names', async () => {
     localStorageMock.getItem.mockReturnValue(null)
     const user = userEvent.setup()
-    render(<App />)
+    renderAppWithTheme()
     
     const input = screen.getByPlaceholderText('Enter a name')
     const addButton = screen.getByRole('button', { name: /plus/i })
@@ -102,7 +128,7 @@ describe('App Component', () => {
     ]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     const user = userEvent.setup()
-    render(<App />)
+    renderAppWithTheme()
     
     expect(screen.getByText('John')).toBeInTheDocument()
     
@@ -115,7 +141,7 @@ describe('App Component', () => {
 
   it('shows disabled shuffle button when no names exist', () => {
     localStorageMock.getItem.mockReturnValue(null)
-    render(<App />)
+    renderAppWithTheme()
     
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     expect(shuffleButton).toBeDisabled()
@@ -127,7 +153,7 @@ describe('App Component', () => {
       { id: '1', name: 'John', color: 'bg-red-500', icon: '👤' },
     ]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
-    render(<App />)
+    renderAppWithTheme()
     
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     expect(shuffleButton).toBeEnabled()
@@ -140,7 +166,7 @@ describe('App Component', () => {
     ]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     const user = userEvent.setup()
-    render(<App />)
+    renderAppWithTheme()
     
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     await user.click(shuffleButton)
@@ -156,7 +182,7 @@ describe('App Component', () => {
     ]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     const user = userEvent.setup()
-    render(<App />)
+    renderAppWithTheme()
     
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     await user.click(shuffleButton)
@@ -178,7 +204,7 @@ describe('App Component', () => {
     ]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     const user = userEvent.setup()
-    render(<App />)
+    renderAppWithTheme()
     
     // First shuffle to select John
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
@@ -194,5 +220,63 @@ describe('App Component', () => {
     
     // Should clear the selected person display
     expect(screen.getByText('Press shuffle to pick a name!')).toBeInTheDocument()
+  })
+
+  // Dark Mode Integration Tests
+  it('renders theme toggle button', () => {
+    localStorageMock.getItem.mockReturnValue(null)
+    renderAppWithTheme()
+
+    const themeToggle = screen.getByRole('button', { name: /switch to/i })
+    expect(themeToggle).toBeInTheDocument()
+  })
+
+  it('allows cycling through theme modes', async () => {
+    const user = userEvent.setup()
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'theme') return 'light'
+      if (key === 'nameShuffle-people') return null
+      return null
+    })
+    renderAppWithTheme()
+
+    const themeToggle = screen.getByRole('button', { name: /switch to dark mode/i })
+    expect(themeToggle).toBeInTheDocument()
+
+    // Click to switch to dark mode
+    await user.click(themeToggle)
+    expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'dark')
+
+    // Should now show switch to system mode
+    const systemButton = screen.getByRole('button', { name: /switch to system mode/i })
+    expect(systemButton).toBeInTheDocument()
+  })
+
+  it('applies dark mode classes when theme is dark', () => {
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'theme') return 'dark'
+      if (key === 'nameShuffle-people') return null
+      return null
+    })
+    renderAppWithTheme()
+
+    expect(document.documentElement.classList.contains('dark')).toBe(true)
+  })
+
+  it('respects system preference when theme is system', () => {
+    localStorageMock.getItem.mockImplementation((key) => {
+      if (key === 'theme') return 'system'
+      if (key === 'nameShuffle-people') return null
+      return null
+    })
+    mockMatchMedia.mockReturnValue({
+      matches: true, // System prefers dark
+      addEventListener: vi.fn(),
+      removeEventListener: vi.fn(),
+    })
+
+    renderAppWithTheme()
+
+    expect(document.documentElement.classList.contains('dark')).toBe(true)
   })
 })
