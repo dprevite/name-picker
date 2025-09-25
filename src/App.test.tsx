@@ -51,6 +51,21 @@ describe('App Component', () => {
 
     // Clear document classes
     document.documentElement.classList.remove('dark')
+
+    // Mock clean URL (no search parameters) by default
+    Object.defineProperty(window, 'location', {
+      value: {
+        search: '',
+        pathname: '/',
+      },
+      writable: true,
+    })
+
+    // Mock history.replaceState
+    Object.defineProperty(window, 'history', {
+      value: { replaceState: vi.fn() },
+      writable: true,
+    })
   })
 
   it('renders the initial state', () => {
@@ -303,19 +318,6 @@ describe('App Component', () => {
   })
 
   it('updates URL when names are added', async () => {
-    const mockReplaceState = vi.fn()
-    Object.defineProperty(window, 'history', {
-      value: { replaceState: mockReplaceState },
-      writable: true,
-    })
-    Object.defineProperty(window, 'location', {
-      value: {
-        search: '',
-        pathname: '/',
-      },
-      writable: true,
-    })
-
     localStorageMock.getItem.mockReturnValue(null)
 
     renderAppWithTheme()
@@ -330,7 +332,7 @@ describe('App Component', () => {
 
     // Wait for URL to be updated
     await waitFor(() => {
-      expect(mockReplaceState).toHaveBeenCalledWith({}, '', '/?names=TestUser')
+      expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/?names=TestUser')
     })
   })
 })
