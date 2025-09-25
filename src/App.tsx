@@ -37,23 +37,65 @@ function App() {
   const [hasLoaded, setHasLoaded] = useState(false)
   const [shufflingIcon, setShufflingIcon] = useState('')
 
+  // Load state from URL on mount
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem('nameShuffle-people')
-      if (saved) {
-        const parsedPeople = JSON.parse(saved)
-        setPeople(parsedPeople)
+    const loadFromURL = () => {
+      const urlParams = new URLSearchParams(window.location.search)
+      const namesParam = urlParams.get('names')
+
+      if (namesParam) {
+        try {
+          const namesList = namesParam.split(',').filter(name => name.trim())
+          if (namesList.length > 0) {
+            const peopleFromURL = namesList.map(name => ({
+              id: crypto.randomUUID(),
+              name: name.trim(),
+              color: getRandomColor(),
+              icon: getRandomIcon(),
+            }))
+            setPeople(peopleFromURL)
+            setHasLoaded(true)
+            return true
+          }
+        } catch (error) {
+          console.warn('Failed to parse names from URL:', error)
+        }
       }
-    } catch (error) {
-      console.warn('Failed to load names from localStorage:', error)
-    } finally {
-      setHasLoaded(true)
+      return false
     }
+
+    // Try URL first, then localStorage
+    if (!loadFromURL()) {
+      try {
+        const saved = localStorage.getItem('nameShuffle-people')
+        if (saved) {
+          const parsedPeople = JSON.parse(saved)
+          setPeople(parsedPeople)
+        }
+      } catch (error) {
+        console.warn('Failed to load names from localStorage:', error)
+      }
+    }
+    setHasLoaded(true)
   }, [])
 
+  // Update URL and localStorage when people state changes
   useEffect(() => {
     if (hasLoaded) {
       localStorage.setItem('nameShuffle-people', JSON.stringify(people))
+
+      // Update URL with names
+      const urlParams = new URLSearchParams(window.location.search)
+      if (people.length > 0) {
+        const namesString = people.map(person => person.name).join(',')
+        urlParams.set('names', namesString)
+      } else {
+        urlParams.delete('names')
+      }
+
+      // Update URL without causing page reload
+      const newUrl = `${window.location.pathname}${urlParams.toString() ? '?' + urlParams.toString() : ''}`
+      window.history.replaceState({}, '', newUrl)
     }
   }, [people, hasLoaded])
 

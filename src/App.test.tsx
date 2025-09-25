@@ -279,4 +279,58 @@ describe('App Component', () => {
 
     expect(document.documentElement.classList.contains('dark')).toBe(true)
   })
+
+  it('loads names from URL parameters on mount', async () => {
+    // Mock URL with names parameter
+    Object.defineProperty(window, 'location', {
+      value: {
+        search: '?names=Alice,Bob,Charlie',
+        pathname: '/',
+      },
+      writable: true,
+    })
+
+    localStorageMock.getItem.mockReturnValue(null)
+
+    renderAppWithTheme()
+
+    // Wait for names to load from URL
+    await waitFor(() => {
+      expect(screen.getByText('Alice')).toBeInTheDocument()
+      expect(screen.getByText('Bob')).toBeInTheDocument()
+      expect(screen.getByText('Charlie')).toBeInTheDocument()
+    })
+  })
+
+  it('updates URL when names are added', async () => {
+    const mockReplaceState = vi.fn()
+    Object.defineProperty(window, 'history', {
+      value: { replaceState: mockReplaceState },
+      writable: true,
+    })
+    Object.defineProperty(window, 'location', {
+      value: {
+        search: '',
+        pathname: '/',
+      },
+      writable: true,
+    })
+
+    localStorageMock.getItem.mockReturnValue(null)
+
+    renderAppWithTheme()
+    const user = userEvent.setup()
+
+    // Add a name
+    const nameInput = screen.getByPlaceholderText('Enter a name')
+    const addButton = screen.getByRole('button', { name: /plus/i })
+
+    await user.type(nameInput, 'TestUser')
+    await user.click(addButton)
+
+    // Wait for URL to be updated
+    await waitFor(() => {
+      expect(mockReplaceState).toHaveBeenCalledWith({}, '', '/?names=TestUser')
+    })
+  })
 })
