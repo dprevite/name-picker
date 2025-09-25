@@ -1,219 +1,213 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from '@playwright/test'
 
 test.describe('Dark Mode Functionality', () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to the page first
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/')
+    await page.waitForLoadState('networkidle')
 
     // Then clear localStorage and reload
-    await page.context().clearCookies();
-    await page.evaluate(() => localStorage.clear());
-    await page.reload();
-    await page.waitForLoadState('networkidle');
-  });
+    await page.context().clearCookies()
+    await page.evaluate(() => localStorage.clear())
+    await page.reload()
+    await page.waitForLoadState('networkidle')
+  })
 
-  test('should start in system mode by default and respect system preference', async ({ page }) => {
-    // Check that the theme toggle shows the correct initial state
-    const themeToggle = page.getByRole('button', { name: /switch to light mode/i });
-    await expect(themeToggle).toBeVisible();
+  test('should start in dark mode by default', async ({ page }) => {
+    // Check that the theme toggle shows the correct initial state (dark mode by default)
+    const themeToggle = page.getByRole('button', { name: /switch to light mode/i })
+    await expect(themeToggle).toBeVisible()
 
-    // Check that html element doesn't have dark class initially (assuming system is light)
-    const htmlClass = await page.locator('html').getAttribute('class');
-    expect(htmlClass || '').not.toContain('dark');
+    // Check that html element has dark class initially
+    const htmlClass = await page.locator('html').getAttribute('class')
+    expect(htmlClass || '').toContain('dark')
 
-    // Verify localStorage has system theme
-    const theme = await page.evaluate(() => localStorage.getItem('theme'));
-    expect(theme).toBeNull(); // Initially null, then becomes system
-  });
+    // Verify localStorage has dark theme (or is null initially)
+    const theme = await page.evaluate(() => localStorage.getItem('theme'))
+    expect(theme === null || theme === 'dark').toBe(true)
+  })
 
-  test('should cycle through themes: system -> light -> dark -> system', async ({ page }) => {
-    // Start with system mode, click to go to light mode
-    await page.getByRole('button', { name: /switch to light mode/i }).click();
+  test('should toggle between light and dark themes', async ({ page }) => {
+    // Start with dark mode by default, click to go to light mode
+    await page.getByRole('button', { name: /switch to light mode/i }).click()
 
     // Should now be in light mode
-    let themeToggle = page.getByRole('button', { name: /switch to dark mode/i });
-    await expect(themeToggle).toBeVisible();
-    let theme = await page.evaluate(() => localStorage.getItem('theme'));
-    expect(theme).toBe('light');
+    let themeToggle = page.getByRole('button', { name: /switch to dark mode/i })
+    await expect(themeToggle).toBeVisible()
+    let theme = await page.evaluate(() => localStorage.getItem('theme'))
+    expect(theme).toBe('light')
+
+    // Verify dark class is removed
+    let htmlClass = await page.locator('html').getAttribute('class')
+    expect(htmlClass || '').not.toContain('dark')
 
     // Click to go to dark mode
-    await themeToggle.click();
+    await themeToggle.click()
 
     // Should now be in dark mode
-    themeToggle = page.getByRole('button', { name: /switch to system mode/i });
-    await expect(themeToggle).toBeVisible();
-    theme = await page.evaluate(() => localStorage.getItem('theme'));
-    expect(theme).toBe('dark');
+    themeToggle = page.getByRole('button', { name: /switch to light mode/i })
+    await expect(themeToggle).toBeVisible()
+    theme = await page.evaluate(() => localStorage.getItem('theme'))
+    expect(theme).toBe('dark')
 
     // Verify dark class is applied
-    const htmlClass = await page.locator('html').getAttribute('class');
-    expect(htmlClass).toContain('dark');
-
-    // Click to go to system mode
-    await themeToggle.click();
-
-    // Should now be in system mode
-    themeToggle = page.getByRole('button', { name: /switch to light mode/i });
-    await expect(themeToggle).toBeVisible();
-    theme = await page.evaluate(() => localStorage.getItem('theme'));
-    expect(theme).toBe('system');
-  });
+    htmlClass = await page.locator('html').getAttribute('class')
+    expect(htmlClass).toContain('dark')
+  })
 
   test('should persist theme preference across page reloads', async ({ page }) => {
-    // Set theme to dark
-    await page.getByRole('button', { name: /switch to light mode/i }).click(); // system -> light
-    await page.getByRole('button', { name: /switch to dark mode/i }).click(); // light -> dark
+    // Set theme to light
+    await page.getByRole('button', { name: /switch to light mode/i }).click() // dark -> light
 
-    // Verify dark mode is active
-    let htmlClass = await page.locator('html').getAttribute('class');
-    expect(htmlClass).toContain('dark');
+    // Verify light mode is active
+    let htmlClass = await page.locator('html').getAttribute('class')
+    expect(htmlClass || '').not.toContain('dark')
 
     // Reload the page
-    await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.reload()
+    await page.waitForLoadState('networkidle')
 
-    // Theme should still be dark
-    htmlClass = await page.locator('html').getAttribute('class');
-    expect(htmlClass).toContain('dark');
+    // Theme should still be light
+    htmlClass = await page.locator('html').getAttribute('class')
+    expect(htmlClass || '').not.toContain('dark')
 
-    const themeToggle = page.getByRole('button', { name: /switch to system mode/i });
-    await expect(themeToggle).toBeVisible();
+    const themeToggle = page.getByRole('button', { name: /switch to dark mode/i })
+    await expect(themeToggle).toBeVisible()
 
-    const theme = await page.evaluate(() => localStorage.getItem('theme'));
-    expect(theme).toBe('dark');
-  });
+    const theme = await page.evaluate(() => localStorage.getItem('theme'))
+    expect(theme).toBe('light')
+  })
 
   test('should apply dark mode styles to all UI components', async ({ page }) => {
     // Switch to dark mode
-    await page.getByRole('button', { name: /switch to light mode/i }).click(); // system -> light
-    await page.getByRole('button', { name: /switch to dark mode/i }).click(); // light -> dark
+    await page.getByRole('button', { name: /switch to light mode/i }).click() // system -> light
+    await page.getByRole('button', { name: /switch to dark mode/i }).click() // light -> dark
 
     // Verify dark mode styles are applied
-    await expect(page.locator('html')).toHaveClass(/dark/);
+    await expect(page.locator('html')).toHaveClass(/dark/)
 
     // Check that CSS variables are being used
-    const mainBg = page.locator('div.min-h-screen'); // Main container
-    await expect(mainBg).toHaveClass(/bg-background/);
+    const mainBg = page.locator('div.min-h-screen') // Main container
+    await expect(mainBg).toHaveClass(/bg-background/)
 
     // Check sidebar uses CSS variables
-    const sidebar = page.locator('.w-80');
-    await expect(sidebar).toHaveClass(/bg-card/);
+    const sidebar = page.locator('.w-80')
+    await expect(sidebar).toHaveClass(/bg-card/)
 
     // Check that input field uses CSS variables since headings were removed
-    const nameInput = page.getByPlaceholder('Enter a name');
-    await expect(nameInput).toHaveClass(/bg-background/);
-  });
+    const nameInput = page.getByPlaceholder('Enter a name')
+    await expect(nameInput).toHaveClass(/bg-background/)
+  })
 
   test('should maintain dark mode functionality with names persistence', async ({ page }) => {
     // Add a name
-    const nameInput = page.getByPlaceholder('Enter a name');
-    await nameInput.fill('Test Name');
-    await page.getByRole('button', { name: /plus/i }).click();
+    const nameInput = page.getByPlaceholder('Enter a name')
+    await nameInput.fill('Test Name')
+    await page.getByRole('button', { name: /plus/i }).click()
 
     // Verify name is added
-    await expect(page.getByText('Test Name')).toBeVisible();
+    await expect(page.getByText('Test Name')).toBeVisible()
 
-    // Switch to dark mode
-    await page.getByRole('button', { name: /switch to light mode/i }).click(); // system -> light
-    await page.getByRole('button', { name: /switch to dark mode/i }).click(); // light -> dark
+    // Switch to light mode first, then back to dark mode
+    await page.getByRole('button', { name: /switch to light mode/i }).click() // dark -> light
+    await page.getByRole('button', { name: /switch to dark mode/i }).click() // light -> dark
 
     // Name should still be visible in dark mode
-    await expect(page.getByText('Test Name')).toBeVisible();
+    await expect(page.getByText('Test Name')).toBeVisible()
 
     // Reload page
-    await page.reload();
-    await page.waitForLoadState('networkidle');
+    await page.reload()
+    await page.waitForLoadState('networkidle')
 
     // Both name and dark mode should persist
-    await expect(page.getByText('Test Name')).toBeVisible();
-    const htmlClass = await page.locator('html').getAttribute('class');
-    expect(htmlClass).toContain('dark');
+    await expect(page.getByText('Test Name')).toBeVisible()
+    const htmlClass = await page.locator('html').getAttribute('class')
+    expect(htmlClass).toContain('dark')
 
     // Verify localStorage has both theme and names
-    const theme = await page.evaluate(() => localStorage.getItem('theme'));
-    const names = await page.evaluate(() => localStorage.getItem('nameShuffle-people'));
-    expect(theme).toBe('dark');
-    expect(names).toContain('Test Name');
-  });
+    const theme = await page.evaluate(() => localStorage.getItem('theme'))
+    const names = await page.evaluate(() => localStorage.getItem('nameShuffle-people'))
+    expect(theme).toBe('dark')
+    expect(names).toContain('Test Name')
+  })
 
   test('should show correct theme toggle icons', async ({ page }) => {
-    // System mode should show monitor icon
-    let themeButton = page.getByRole('button', { name: /switch to light mode/i });
-    await expect(themeButton).toBeVisible();
+    // Dark mode by default - should show moon icon and switch to light label
+    let themeButton = page.getByRole('button', { name: /switch to light mode/i })
+    await expect(themeButton).toBeVisible()
 
-    // Switch to light mode - should show sun icon
-    await themeButton.click();
-    themeButton = page.getByRole('button', { name: /switch to dark mode/i });
-    await expect(themeButton).toBeVisible();
+    // Switch to light mode - should show sun icon and switch to dark label
+    await themeButton.click()
+    themeButton = page.getByRole('button', { name: /switch to dark mode/i })
+    await expect(themeButton).toBeVisible()
 
-    // Switch to dark mode - should show moon icon
-    await themeButton.click();
-    themeButton = page.getByRole('button', { name: /switch to system mode/i });
-    await expect(themeButton).toBeVisible();
-  });
+    // Switch back to dark mode - should show moon icon and switch to light label
+    await themeButton.click()
+    themeButton = page.getByRole('button', { name: /switch to light mode/i })
+    await expect(themeButton).toBeVisible()
+  })
 
   test('should handle shuffle functionality in dark mode', async ({ page }) => {
     // Add multiple names
-    const nameInput = page.getByPlaceholder('Enter a name');
+    const nameInput = page.getByPlaceholder('Enter a name')
 
-    await nameInput.fill('Alice');
-    await page.getByRole('button', { name: /plus/i }).click();
+    await nameInput.fill('Alice')
+    await page.getByRole('button', { name: /plus/i }).click()
 
-    await nameInput.fill('Bob');
-    await page.getByRole('button', { name: /plus/i }).click();
+    await nameInput.fill('Bob')
+    await page.getByRole('button', { name: /plus/i }).click()
 
-    await nameInput.fill('Charlie');
-    await page.getByRole('button', { name: /plus/i }).click();
+    await nameInput.fill('Charlie')
+    await page.getByRole('button', { name: /plus/i }).click()
 
-    // Switch to dark mode
-    await page.getByRole('button', { name: /switch to light mode/i }).click(); // system -> light
-    await page.getByRole('button', { name: /switch to dark mode/i }).click(); // light -> dark
+    // Switch to light mode first, then back to dark mode
+    await page.getByRole('button', { name: /switch to light mode/i }).click() // dark -> light
+    await page.getByRole('button', { name: /switch to dark mode/i }).click() // light -> dark
 
     // Verify names are visible in dark mode
-    await expect(page.getByText('Alice')).toBeVisible();
-    await expect(page.getByText('Bob')).toBeVisible();
-    await expect(page.getByText('Charlie')).toBeVisible();
+    await expect(page.getByText('Alice')).toBeVisible()
+    await expect(page.getByText('Bob')).toBeVisible()
+    await expect(page.getByText('Charlie')).toBeVisible()
 
     // Test shuffle functionality
-    const shuffleButton = page.getByRole('button', { name: /shuffle/i });
-    await expect(shuffleButton).toBeEnabled();
+    const shuffleButton = page.getByRole('button', { name: /shuffle/i })
+    await expect(shuffleButton).toBeEnabled()
 
-    await shuffleButton.click();
+    await shuffleButton.click()
 
     // Should show shuffling animation with dark mode styles
-    await expect(page.getByText('🎲')).toBeVisible();
-    await expect(page.getByRole('button', { name: 'Shuffling...' })).toBeVisible();
+    await expect(page.getByText('🎲')).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Shuffling...' })).toBeVisible()
 
     // Wait for shuffle to complete
-    await expect(page.getByRole('button', { name: 'Shuffling...' })).toBeHidden({ timeout: 5000 });
+    await expect(page.getByRole('button', { name: 'Shuffling...' })).toBeHidden({ timeout: 5000 })
 
     // Should show a selected name
-    const selectedNames = ['Alice', 'Bob', 'Charlie'];
-    const selectedNameElement = page.locator('p.font-bold');
-    await expect(selectedNameElement).toBeVisible({ timeout: 10000 });
-    const selectedName = await selectedNameElement.textContent();
-    expect(selectedNames).toContain(selectedName?.trim());
-  });
+    const selectedNames = ['Alice', 'Bob', 'Charlie']
+    const selectedNameElement = page.locator('p.font-bold')
+    await expect(selectedNameElement).toBeVisible({ timeout: 10000 })
+    const selectedName = await selectedNameElement.textContent()
+    expect(selectedNames).toContain(selectedName?.trim())
+  })
 
   test('should maintain accessible theme toggle across all states', async ({ page }) => {
-    // Check accessibility in system mode
-    let themeToggle = page.getByRole('button', { name: /switch to light mode/i });
-    await expect(themeToggle).toHaveAttribute('aria-label');
+    // Check accessibility in dark mode (default)
+    let themeToggle = page.getByRole('button', { name: /switch to light mode/i })
+    await expect(themeToggle).toHaveAttribute('aria-label')
 
     // Switch to light mode and check accessibility
-    await themeToggle.click();
-    themeToggle = page.getByRole('button', { name: /switch to dark mode/i });
-    await expect(themeToggle).toHaveAttribute('aria-label');
+    await themeToggle.click()
+    themeToggle = page.getByRole('button', { name: /switch to dark mode/i })
+    await expect(themeToggle).toHaveAttribute('aria-label')
 
-    // Switch to dark mode and check accessibility
-    await themeToggle.click();
-    themeToggle = page.getByRole('button', { name: /switch to system mode/i });
-    await expect(themeToggle).toHaveAttribute('aria-label');
+    // Switch back to dark mode and check accessibility
+    await themeToggle.click()
+    themeToggle = page.getByRole('button', { name: /switch to light mode/i })
+    await expect(themeToggle).toHaveAttribute('aria-label')
 
     // Verify theme toggle is always in the top-right corner
-    const togglePosition = await themeToggle.boundingBox();
-    expect(togglePosition?.x).toBeGreaterThan(1000); // Should be on the right side
-    expect(togglePosition?.y).toBeLessThan(100); // Should be near the top
-  });
-});
+    const togglePosition = await themeToggle.boundingBox()
+    expect(togglePosition?.x).toBeGreaterThan(1000) // Should be on the right side
+    expect(togglePosition?.y).toBeLessThan(100) // Should be near the top
+  })
+})
