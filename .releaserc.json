@@ -1,6 +1,6 @@
 {
   "branches": ["main"],
-  "repositoryUrl": "https://github.com/your-username/name-shuffle-app.git",
+  "repositoryUrl": "https://github.com/dprevite/name-picker.git",
   "plugins": [
     [
       "@semantic-release/commit-analyzer",
