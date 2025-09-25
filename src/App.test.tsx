@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest'
-import { render, screen, fireEvent, waitFor } from '@testing-library/react'
+import { render, screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import App from './App'
 
@@ -13,7 +13,7 @@ const localStorageMock = {
 Object.defineProperty(window, 'localStorage', { value: localStorageMock })
 
 // Mock crypto.randomUUID
-Object.defineProperty(global, 'crypto', {
+Object.defineProperty(globalThis, 'crypto', {
   value: {
     randomUUID: () => 'test-uuid-' + Math.random().toString(36).substr(2, 9),
   },
@@ -145,7 +145,7 @@ describe('App Component', () => {
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     await user.click(shuffleButton)
     
-    expect(screen.getByText('Shuffling...')).toBeInTheDocument()
+    expect(screen.getAllByText('Shuffling...')).toHaveLength(2)
     expect(screen.getByText('🎲')).toBeInTheDocument()
     expect(shuffleButton).toBeDisabled()
   })
@@ -195,4 +195,4 @@ describe('App Component', () => {
     // Should clear the selected person display
     expect(screen.getByText('Press shuffle to pick a name!')).toBeInTheDocument()
   })
-}
+})

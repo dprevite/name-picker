@@ -173,7 +173,7 @@ describe('Input Component', () => {
     expect(input).toHaveAttribute('maxlength', '10')
     expect(input).toHaveAttribute('minlength', '2')
     expect(input).toHaveAttribute('autocomplete', 'off')
-    expect(input).toHaveAttribute('autofocus')
+    expect(input).toHaveFocus()
   })
 
   it('shows focus ring styles when focused', async () => {
@@ -182,8 +182,8 @@ describe('Input Component', () => {
     
     const input = screen.getByPlaceholderText('Focus ring test')
     expect(input).toHaveClass('focus-visible:outline-none', 'focus-visible:ring-2')
-    
+
     await user.click(input)
     expect(input).toHaveFocus()
   })
-}
+})

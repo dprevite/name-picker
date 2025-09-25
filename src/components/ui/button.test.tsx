@@ -132,10 +132,10 @@ describe('Button Component', () => {
       </Button>
     )
     
-    const button = screen.getByRole('button', { name: 'Submit' })
+    const button = screen.getByRole('button', { name: 'Test button' })
     expect(button).toHaveAttribute('type', 'submit')
     expect(button).toHaveAttribute('form', 'test-form')
     expect(button).toHaveAttribute('aria-label', 'Test button')
     expect(button).toHaveAttribute('data-testid', 'test-button')
   })
-}
+})

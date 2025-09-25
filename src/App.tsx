@@ -107,7 +107,7 @@ function App() {
             onKeyPress={handleKeyPress}
             className="flex-1"
           />
-          <Button onClick={addPerson} size="icon">
+          <Button onClick={addPerson} size="icon" aria-label="Plus">
             <Plus className="h-4 w-4" />
           </Button>
         </div>
@@ -131,6 +131,7 @@ function App() {
                   size="icon"
                   onClick={() => removePerson(person.id)}
                   className="text-gray-400 hover:text-red-500"
+                  aria-label="Trash"
                 >
                   <Trash2 className="h-4 w-4" />
                 </Button>
