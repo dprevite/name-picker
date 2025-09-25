@@ -160,8 +160,6 @@ function App() {
       {/* Main Area - Shuffle */}
       <div className="flex-1 flex flex-col items-center justify-center p-8">
         <div className="text-center space-y-8">
-          <h1 className="text-4xl font-bold text-foreground">Name Shuffle</h1>
-          
           {/* Selected Person Display */}
           <div className="h-64 flex items-center justify-center">
             {isShuffling ? (
