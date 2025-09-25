@@ -36,9 +36,9 @@ test.describe('Name Persistence', () => {
     });
 
     expect(savedNames).toHaveLength(3);
-    expect(savedNames.map((p: any) => p.name)).toContain('Alice');
-    expect(savedNames.map((p: any) => p.name)).toContain('Bob');
-    expect(savedNames.map((p: any) => p.name)).toContain('Charlie');
+    expect(savedNames.map((p: { name: string }) => p.name)).toContain('Alice');
+    expect(savedNames.map((p: { name: string }) => p.name)).toContain('Bob');
+    expect(savedNames.map((p: { name: string }) => p.name)).toContain('Charlie');
 
     // Reload the page
     await page.reload();
@@ -213,7 +213,7 @@ test.describe('Name Persistence', () => {
     });
 
     expect(savedNames).toHaveLength(specialNames.length);
-    const savedNamesArray = savedNames.map((p: any) => p.name);
+    const savedNamesArray = savedNames.map((p: { name: string }) => p.name);
     for (const name of specialNames) {
       expect(savedNamesArray).toContain(name);
     }

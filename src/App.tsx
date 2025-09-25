@@ -125,7 +125,9 @@ function App() {
       <div className="w-80 bg-card border-r border-border p-6 relative">
         {/* Background effect for sidebar */}
         {selectedPerson && showResult && (
-          <div className={`absolute inset-0 ${selectedPerson.color} opacity-15 transition-opacity duration-500`}></div>
+          <div
+            className={`absolute inset-0 ${selectedPerson.color} opacity-15 transition-opacity duration-500`}
+          ></div>
         )}
         {/* Add Name Input */}
         <div className="flex gap-2 mb-6 relative z-10">
@@ -176,7 +178,9 @@ function App() {
       <div className="flex-1 flex items-center justify-center p-4 relative">
         {/* Background effect */}
         {selectedPerson && showResult && (
-          <div className={`absolute inset-0 ${selectedPerson.color} opacity-10 transition-opacity duration-500`}></div>
+          <div
+            className={`absolute inset-0 ${selectedPerson.color} opacity-10 transition-opacity duration-500`}
+          ></div>
         )}
         <div className="text-center space-y-16 relative z-10">
           {/* Selected Person Display */}
@@ -194,7 +198,9 @@ function App() {
                 >
                   {selectedPerson.icon}
                 </div>
-                <p className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-35 text-4xl md:text-5xl lg:text-6xl font-bold ${selectedPerson.color.replace('bg-', 'text-')} z-20 animate-bounce-in drop-shadow-2xl`}>
+                <p
+                  className={`absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-35 text-4xl md:text-5xl lg:text-6xl font-bold ${selectedPerson.color.replace('bg-', 'text-')} z-20 animate-bounce-in drop-shadow-2xl`}
+                >
                   {selectedPerson.name}
                 </p>
               </div>
