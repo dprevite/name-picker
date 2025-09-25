@@ -7,8 +7,15 @@
 
 A beautiful, interactive web application for randomly selecting names with dynamic animations and persistent storage. Perfect for classrooms, team activities, and any scenario requiring fair random selection.
 
-<!-- Add screenshot here when available -->
-> **Note**: Add a screenshot of the application interface showing the two-column layout with names list and shuffle area.
+## 📸 Screenshots
+
+### Main Interface
+![Name Shuffle App - Main Interface](screenshots/02-with-names.png)
+*Clean two-column layout with names list and shuffle area*
+
+### Shuffle Animation & Results
+![Shuffle Animation](screenshots/03-during-shuffle.png) ![Selected Result](screenshots/04-after-shuffle.png)
+*Dynamic shuffle animation (left) and selection results with color theming (right)*
 
 ## ✨ Key Features
 
