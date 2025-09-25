@@ -129,7 +129,7 @@ jobs:
       - name: Update docker.md with new version
         run: |
           VERSION=${{ needs.build-and-push.outputs.version }}
-          sed -i "s/docker run -p 8080:80 .*/docker run -p 8080:80 ghcr.io\/${{ github.repository }}:${VERSION}/" docs/docker.md
+          sed -i "s|docker run -p 8080:80 ghcr.io/${{ github.repository }}:.*|docker run -p 8080:80 ghcr.io/${{ github.repository }}:${VERSION}|g" docs/docker.md
 
       - name: Commit documentation updates
         run: |
