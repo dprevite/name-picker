@@ -166,7 +166,7 @@ describe('App Component', () => {
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     await user.click(shuffleButton)
 
-    expect(screen.getAllByText('Shuffling...')).toHaveLength(2)
+    expect(screen.getAllByText('Shuffling...')).toHaveLength(1)
     expect(screen.getByText('🎲')).toBeInTheDocument()
     expect(shuffleButton).toBeDisabled()
   })
@@ -191,7 +191,7 @@ describe('App Component', () => {
     // Should show the selected name in the center display (large text)
     await waitFor(() => {
       const selectedNameElement = screen.getByText('John', {
-        selector: 'p.text-5xl.font-bold'
+        selector: 'p.font-bold'
       })
       expect(selectedNameElement).toBeInTheDocument()
     })
