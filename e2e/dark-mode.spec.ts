@@ -183,15 +183,17 @@ test.describe('Dark Mode Functionality', () => {
 
     // Should show shuffling animation with dark mode styles
     await expect(page.getByText('🎲')).toBeVisible();
-    await expect(page.getByRole('paragraph').filter({ hasText: 'Shuffling...' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Shuffling...' })).toBeVisible();
 
     // Wait for shuffle to complete
-    await expect(page.getByRole('paragraph').filter({ hasText: 'Shuffling...' })).toBeHidden({ timeout: 5000 });
+    await expect(page.getByRole('button', { name: 'Shuffling...' })).toBeHidden({ timeout: 5000 });
 
     // Should show a selected name
     const selectedNames = ['Alice', 'Bob', 'Charlie'];
-    const selectedName = await page.locator('.text-5xl.font-bold').textContent();
-    expect(selectedNames).toContain(selectedName);
+    const selectedNameElement = page.locator('p.font-bold');
+    await expect(selectedNameElement).toBeVisible({ timeout: 10000 });
+    const selectedName = await selectedNameElement.textContent();
+    expect(selectedNames).toContain(selectedName?.trim());
   });
 
   test('should maintain accessible theme toggle across all states', async ({ page }) => {

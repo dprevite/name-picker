@@ -64,17 +64,24 @@ function App() {
       return false
     }
 
-    // Try URL first, then localStorage
-    if (!loadFromURL()) {
-      try {
-        const saved = localStorage.getItem('nameShuffle-people')
-        if (saved) {
-          const parsedPeople = JSON.parse(saved)
+    // Try localStorage first, then URL as fallback
+    let loadedFromStorage = false
+    try {
+      const saved = localStorage.getItem('nameShuffle-people')
+      if (saved) {
+        const parsedPeople = JSON.parse(saved)
+        if (parsedPeople.length > 0) {
           setPeople(parsedPeople)
+          loadedFromStorage = true
         }
-      } catch (error) {
-        console.warn('Failed to load names from localStorage:', error)
       }
+    } catch (error) {
+      console.warn('Failed to load names from localStorage:', error)
+    }
+
+    // Only use URL if localStorage is empty
+    if (!loadedFromStorage) {
+      loadFromURL()
     }
     setHasLoaded(true)
   }, [])

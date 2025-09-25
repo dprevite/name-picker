@@ -1,24 +1,53 @@
-import { Sun, Moon } from 'lucide-react'
+import { Sun, Moon, Monitor } from 'lucide-react'
 import { Button } from './ui/button'
 import { useTheme } from '../hooks/useTheme'
 
 export function ThemeToggle() {
-  const { actualTheme, setTheme } = useTheme()
+  const { theme, actualTheme, setTheme } = useTheme()
 
   const toggleTheme = () => {
-    // Simple toggle between light and dark based on current visual appearance
-    const nextTheme = actualTheme === 'dark' ? 'light' : 'dark'
-    setTheme(nextTheme)
+    // Cycle through: system -> light -> dark -> system
+    switch (theme) {
+      case 'system':
+        setTheme('light')
+        break
+      case 'light':
+        setTheme('dark')
+        break
+      case 'dark':
+        setTheme('system')
+        break
+      default:
+        setTheme('system')
+    }
   }
 
   const getIcon = () => {
-    // Show icon based on what it will switch TO, not current state
-    return actualTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />
+    // Show icon based on current theme, not what it will switch to
+    switch (theme) {
+      case 'system':
+        return <Monitor className="h-4 w-4" />
+      case 'light':
+        return <Sun className="h-4 w-4" />
+      case 'dark':
+        return <Moon className="h-4 w-4" />
+      default:
+        return <Monitor className="h-4 w-4" />
+    }
   }
 
   const getLabel = () => {
     // Show label based on what it will switch TO
-    return actualTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
+    switch (theme) {
+      case 'system':
+        return 'Switch to light mode'
+      case 'light':
+        return 'Switch to dark mode'
+      case 'dark':
+        return 'Switch to system mode'
+      default:
+        return 'Switch to light mode'
+    }
   }
 
   return (
