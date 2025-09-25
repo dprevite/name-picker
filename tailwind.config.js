@@ -11,6 +11,7 @@ export default {
         'spin-slow': 'spin 3s linear infinite',
         'bounce-in': 'bounceIn 0.6s ease-out',
         'fade-in': 'fadeIn 0.3s ease-in-out',
+        'grow-circle': 'growCircle 0.8s ease-out forwards',
       },
       keyframes: {
         bounceIn: {
@@ -22,6 +23,11 @@ export default {
         fadeIn: {
           '0%': { opacity: '0', transform: 'translateY(10px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+        growCircle: {
+          '0%': { transform: 'scale(1)' },
+          '60%': { transform: 'scale(1.4)' },
+          '100%': { transform: 'scale(1.33)' },
         },
       },
     },

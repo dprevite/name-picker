@@ -170,7 +170,7 @@ function App() {
             ) : selectedPerson && showResult ? (
               <div className="text-center animate-bounce-in">
                 <div
-                  className={`w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 ${selectedPerson.color} rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto shadow-2xl`}
+                  className={`w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 ${selectedPerson.color} rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto shadow-2xl animate-grow-circle`}
                 >
                   {selectedPerson.icon}
                 </div>
