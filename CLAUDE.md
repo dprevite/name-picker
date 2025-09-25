@@ -25,7 +25,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - `docker build -t name-shuffle-app .` - Build Docker image locally
 - `docker run -p 8080:80 name-shuffle-app` - Run container locally
 - `docker-compose up -d` - Run with Docker Compose
-- Production images: `ghcr.io/your-username/name-shuffle-app:latest`
+- Production images: `ghcr.io/dprevite/name-picker:latest`
 
 ## Architecture Overview
 

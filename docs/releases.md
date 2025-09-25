@@ -95,16 +95,16 @@ After a release, the Docker image is available at:
 
 ```bash
 # Latest version
-docker run -p 8080:80 ghcr.io/your-username/name-shuffle-app:latest
+docker run -p 8080:80 ghcr.io/dprevite/name-picker:latest
 
 # Specific version
-docker run -p 8080:80 ghcr.io/your-username/name-shuffle-app:v1.0.0
+docker run -p 8080:80 ghcr.io/dprevite/name-picker:v1.0.0
 
 # Major version
-docker run -p 8080:80 ghcr.io/your-username/name-shuffle-app:1
+docker run -p 8080:80 ghcr.io/dprevite/name-picker:1
 
 # Major.Minor version
-docker run -p 8080:80 ghcr.io/your-username/name-shuffle-app:1.0
+docker run -p 8080:80 ghcr.io/dprevite/name-picker:1.0
 ```
 
 ### 🔧 Configuration Files

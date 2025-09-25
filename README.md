@@ -1,7 +1,7 @@
 # Name Shuffle App 🎲
 
-[![Build and Release](https://github.com/your-username/name-shuffle-app/actions/workflows/release.yml/badge.svg)](https://github.com/your-username/name-shuffle-app/actions/workflows/release.yml)
-[![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/your-username/name-shuffle-app/pkgs/container/name-shuffle-app)
+[![Build and Release](https://github.com/dprevite/name-picker/actions/workflows/release.yml/badge.svg)](https://github.com/dprevite/name-picker/actions/workflows/release.yml)
+[![Docker Image](https://img.shields.io/badge/docker-ghcr.io-blue)](https://github.com/dprevite/name-picker/pkgs/container/name-picker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://typescriptlang.org)
 
@@ -32,7 +32,7 @@ A beautiful, interactive web application for randomly selecting names with dynam
 ### Option 1: Docker (Recommended)
 ```bash
 # Run the latest release
-docker run -p 8080:80 ghcr.io/your-username/name-shuffle-app:latest
+docker run -p 8080:80 ghcr.io/dprevite/name-picker:latest
 ```
 Visit http://localhost:8080
 
@@ -42,7 +42,7 @@ Create `docker-compose.yml`:
 version: '3.8'
 services:
   name-shuffle:
-    image: ghcr.io/your-username/name-shuffle-app:latest
+    image: ghcr.io/dprevite/name-picker:latest
     ports:
       - "8080:80"
     restart: unless-stopped
@@ -57,8 +57,8 @@ Run with: `docker-compose up -d`
 
 ### Option 3: Local Development
 ```bash
-git clone https://github.com/your-username/name-shuffle-app.git
-cd name-shuffle-app
+git clone https://github.com/dprevite/name-picker.git
+cd name-picker
 npm install
 npm run dev
 ```
