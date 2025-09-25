@@ -97,7 +97,7 @@ function App() {
     }, 2000)
   }
 
-  const handleKeyPress = (e: React.KeyboardEvent) => {
+  const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') {
       addPerson()
     }
@@ -112,18 +112,17 @@ function App() {
 
       {/* Left Column - Names List */}
       <div className="w-80 bg-card border-r border-border p-6">
-        <h2 className="text-2xl font-bold text-card-foreground mb-6">Names</h2>
-        
+
         {/* Add Name Input */}
         <div className="flex gap-2 mb-6">
           <Input
             placeholder="Enter a name"
             value={newName}
             onChange={(e) => setNewName(e.target.value)}
-            onKeyPress={handleKeyPress}
+            onKeyDown={handleKeyDown}
             className="flex-1"
           />
-          <Button onClick={addPerson} size="icon" aria-label="Plus">
+          <Button onClick={addPerson} size="icon" aria-label="Plus" className="cursor-pointer">
             <Plus className="h-4 w-4" />
           </Button>
         </div>
@@ -146,7 +145,7 @@ function App() {
                   variant="ghost"
                   size="icon"
                   onClick={() => removePerson(person.id)}
-                  className="text-muted-foreground hover:text-destructive"
+                  className="text-muted-foreground hover:text-destructive cursor-pointer"
                   aria-label="Trash"
                 >
                   <Trash2 className="h-4 w-4" />
@@ -161,27 +160,27 @@ function App() {
       <div className="flex-1 flex flex-col items-center justify-center p-8">
         <div className="text-center space-y-8">
           {/* Selected Person Display */}
-          <div className="h-64 flex items-center justify-center">
+          <div className="h-96 md:h-[32rem] lg:h-[36rem] flex items-center justify-center">
             {isShuffling ? (
               <div className="text-center">
-                <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center text-4xl animate-spin-slow mb-4">
+                <div className="w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 bg-muted rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl animate-spin-slow mb-8">
                   🎲
                 </div>
-                <p className="text-xl text-muted-foreground">Shuffling...</p>
+                <p className="text-3xl md:text-4xl text-muted-foreground">Shuffling...</p>
               </div>
             ) : selectedPerson && showResult ? (
               <div className="text-center animate-bounce-in">
-                <div className={`w-24 h-24 ${selectedPerson.color} rounded-full flex items-center justify-center text-4xl mb-4 mx-auto`}>
+                <div className={`w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 ${selectedPerson.color} rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto shadow-2xl`}>
                   {selectedPerson.icon}
                 </div>
-                <p className="text-3xl font-bold text-foreground">{selectedPerson.name}</p>
+                <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground">{selectedPerson.name}</p>
               </div>
             ) : (
               <div className="text-center text-muted-foreground">
-                <div className="w-24 h-24 bg-muted rounded-full flex items-center justify-center text-4xl mb-4 mx-auto">
+                <div className="w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 bg-muted rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto">
                   👤
                 </div>
-                <p className="text-xl">Press shuffle to pick a name!</p>
+                <p className="text-2xl md:text-3xl">Press shuffle to pick a name!</p>
               </div>
             )}
           </div>
@@ -191,7 +190,7 @@ function App() {
             onClick={shufflePerson}
             disabled={people.length === 0 || isShuffling}
             size="lg"
-            className="text-xl px-8 py-4 h-auto bg-blue-600 hover:bg-blue-700"
+            className="text-xl px-8 py-4 h-auto bg-blue-600 hover:bg-blue-700 text-white disabled:text-white font-semibold shadow-lg transition-all duration-200 hover:shadow-xl hover:scale-105 disabled:opacity-50"
           >
             <Shuffle className="h-6 w-6 mr-2" />
             {isShuffling ? 'Shuffling...' : 'Shuffle!'}

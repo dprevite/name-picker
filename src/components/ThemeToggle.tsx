@@ -3,47 +3,32 @@ import { Button } from './ui/button'
 import { useTheme } from '../contexts/ThemeContext'
 
 export function ThemeToggle() {
-  const { theme, setTheme } = useTheme()
+  const { theme, actualTheme, setTheme } = useTheme()
 
-  const cycleTheme = () => {
-    const themeOrder: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system']
-    const currentIndex = themeOrder.indexOf(theme)
-    const nextIndex = (currentIndex + 1) % themeOrder.length
-    const nextTheme = themeOrder[nextIndex]
-
-    // Provide immediate visual feedback
+  const toggleTheme = () => {
+    // Simple toggle between light and dark based on current visual appearance
+    const nextTheme = actualTheme === 'dark' ? 'light' : 'dark'
     setTheme(nextTheme)
   }
 
   const getIcon = () => {
-    switch (theme) {
-      case 'light':
-        return <Sun className="h-4 w-4" />
-      case 'dark':
-        return <Moon className="h-4 w-4" />
-      case 'system':
-        return <Monitor className="h-4 w-4" />
-    }
+    // Show icon based on what it will switch TO, not current state
+    return actualTheme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />
   }
 
   const getLabel = () => {
-    switch (theme) {
-      case 'light':
-        return 'Switch to dark mode'
-      case 'dark':
-        return 'Switch to system mode'
-      case 'system':
-        return 'Switch to light mode'
-    }
+    // Show label based on what it will switch TO
+    return actualTheme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'
   }
 
   return (
     <Button
-      variant="ghost"
+      variant="outline"
       size="icon"
-      onClick={cycleTheme}
+      onClick={toggleTheme}
       aria-label={getLabel()}
-      className="text-muted-foreground hover:text-foreground"
+      title="Toggle dark mode"
+      className="text-muted-foreground hover:text-foreground hover:bg-accent cursor-pointer transition-all duration-150 hover:scale-105 active:scale-95 active:bg-accent/80 border border-border hover:border-primary shadow-sm hover:shadow-md"
     >
       {getIcon()}
     </Button>
