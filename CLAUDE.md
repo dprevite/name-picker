@@ -21,6 +21,30 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - Run single test file: `npx vitest src/App.test.tsx`
 - Run tests matching pattern: `npx vitest --grep "shuffle"`
 
+### Pre-Commit Quality Checks
+**IMPORTANT: Always run these commands before committing or calling work complete:**
+
+1. **TypeScript Validation**: `npm run typecheck` - Must pass with no errors
+2. **Code Quality**: `npm run lint` - Must pass with no errors
+3. **Unit Tests**: `npm test` - Must pass all tests
+4. **Build Verification**: `npm run build` - Must complete successfully
+
+**For JavaScript/TypeScript Changes:**
+- Run `npm run typecheck` first and fix any type errors
+- Run `npm run lint` and fix any linting issues
+- Only then commit or mark work as complete
+
+**Workflow:**
+```bash
+# Before any commit with JS/TS changes:
+npm run typecheck  # Fix any type errors
+npm run lint       # Fix any lint errors
+npm test          # Ensure tests pass
+npm run build     # Verify build works
+git add .
+git commit -m "your message"
+```
+
 ### Docker & Deployment
 - `docker build -t name-shuffle-app .` - Build Docker image locally
 - `docker run -p 8080:80 name-shuffle-app` - Run container locally
