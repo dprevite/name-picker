@@ -34,17 +34,27 @@ function App() {
   const [selectedPerson, setSelectedPerson] = useState<Person | null>(null)
   const [isShuffling, setIsShuffling] = useState(false)
   const [showResult, setShowResult] = useState(false)
+  const [hasLoaded, setHasLoaded] = useState(false)
 
   useEffect(() => {
-    const saved = localStorage.getItem('nameShuffle-people')
-    if (saved) {
-      setPeople(JSON.parse(saved))
+    try {
+      const saved = localStorage.getItem('nameShuffle-people')
+      if (saved) {
+        const parsedPeople = JSON.parse(saved)
+        setPeople(parsedPeople)
+      }
+    } catch (error) {
+      console.warn('Failed to load names from localStorage:', error)
+    } finally {
+      setHasLoaded(true)
     }
   }, [])
 
   useEffect(() => {
-    localStorage.setItem('nameShuffle-people', JSON.stringify(people))
-  }, [people])
+    if (hasLoaded) {
+      localStorage.setItem('nameShuffle-people', JSON.stringify(people))
+    }
+  }, [people, hasLoaded])
 
   const getRandomColor = () => COLORS[Math.floor(Math.random() * COLORS.length)]
   const getRandomIcon = () => ICONS[Math.floor(Math.random() * ICONS.length)]
