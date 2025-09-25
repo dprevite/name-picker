@@ -4,8 +4,18 @@ This document explains how to build and run the Name Shuffle App using Docker wi
 
 ## Quick Start
 
+### Using Pre-built Image (Recommended)
 ```bash
-# Build the Docker image
+# Run the latest released version from GitHub Container Registry
+docker run -p 8080:80 ghcr.io/your-username/name-shuffle-app:latest
+
+# Or run a specific version
+docker run -p 8080:80 ghcr.io/your-username/name-shuffle-app:v1.0.0
+```
+
+### Building Locally
+```bash
+# Build the Docker image locally
 docker build -t name-shuffle-app .
 
 # Run the container
@@ -13,6 +23,19 @@ docker run -p 8080:80 name-shuffle-app
 ```
 
 The application will be available at http://localhost:8080
+
+## Pre-built Images
+
+Pre-built Docker images are automatically created and published to GitHub Container Registry (GHCR) for every release:
+
+- **Registry**: `ghcr.io/your-username/name-shuffle-app`
+- **Tags Available**:
+  - `latest` - Latest stable release
+  - `v1.2.3` - Specific semantic version
+  - `1` - Latest major version 1
+  - `1.2` - Latest patch version in 1.2.x
+
+See [releases.md](./releases.md) for more information about automatic releases.
 
 ## Multi-Stage Build Architecture
 
