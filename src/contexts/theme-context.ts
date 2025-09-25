@@ -1,10 +1,9 @@
 import { createContext } from 'react'
 
-type Theme = 'light' | 'dark' | 'system'
+type Theme = 'light' | 'dark'
 
 export interface ThemeContextType {
   theme: Theme
-  actualTheme: 'light' | 'dark'
   setTheme: (theme: Theme) => void
 }
 

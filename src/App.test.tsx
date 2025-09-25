@@ -262,9 +262,11 @@ describe('App Component', () => {
     await user.click(themeToggle)
     expect(localStorageMock.setItem).toHaveBeenCalledWith('theme', 'dark')
 
-    // Should now show switch to light mode
-    const lightButton = screen.getByRole('button', { name: /switch to light mode/i })
-    expect(lightButton).toBeInTheDocument()
+    // Should now show switch to light mode (wait for button to update)
+    await waitFor(() => {
+      const lightButton = screen.getByRole('button', { name: /switch to light mode/i })
+      expect(lightButton).toBeInTheDocument()
+    })
   })
 
   it('applies dark mode classes when theme is dark', () => {

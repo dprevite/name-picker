@@ -33,44 +33,28 @@ describe('ThemeToggle', () => {
     localStorageMock.setItem.mockClear()
     mockMatchMedia.mockClear()
 
-    // Default mock for matchMedia
-    mockMatchMedia.mockReturnValue({
-      matches: false,
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    })
-
     // Clear document classes
     document.documentElement.classList.remove('dark')
   })
 
   it('renders theme toggle button', () => {
     localStorageMock.getItem.mockReturnValue(null)
-    mockMatchMedia.mockReturnValue({
-      matches: false, // light system preference
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    })
     renderThemeToggle()
 
     const button = screen.getByRole('button')
     expect(button).toBeInTheDocument()
-    expect(button).toHaveAttribute('aria-label', 'Switch to dark mode')
+    // Default is dark theme, so should show "Switch to light mode"
+    expect(button).toHaveAttribute('aria-label', 'Switch to light mode')
   })
 
-  it('shows correct icon and label based on actual theme', () => {
+  it('shows correct icon and label based on theme', () => {
     localStorageMock.getItem.mockReturnValue(null)
-    // Mock system preference as light
-    mockMatchMedia.mockReturnValue({
-      matches: false, // light mode
-      addEventListener: vi.fn(),
-      removeEventListener: vi.fn(),
-    })
     renderThemeToggle()
 
     const button = screen.getByRole('button')
-    expect(button).toHaveAttribute('aria-label', 'Switch to dark mode')
-    // Moon icon should be present when in light mode (shows what it will switch to)
+    // Default is dark theme, so should show "Switch to light mode"
+    expect(button).toHaveAttribute('aria-label', 'Switch to light mode')
+    // Moon icon should be present when in dark mode
     expect(button.querySelector('svg')).toBeInTheDocument()
   })
 
@@ -80,17 +64,17 @@ describe('ThemeToggle', () => {
 
     const button = screen.getByRole('button')
     expect(button).toHaveAttribute('aria-label', 'Switch to dark mode')
-    // Sun icon should be present (lucide-react sun icon)
+    // Sun icon should be present in light mode
     expect(button.querySelector('svg')).toBeInTheDocument()
   })
 
-  it('shows sun icon and correct label in dark mode', () => {
+  it('shows moon icon and correct label in dark mode', () => {
     localStorageMock.getItem.mockReturnValue('dark')
     renderThemeToggle()
 
     const button = screen.getByRole('button')
     expect(button).toHaveAttribute('aria-label', 'Switch to light mode')
-    // Sun icon should be present when in dark mode (shows what it will switch to)
+    // Moon icon should be present in dark mode
     expect(button.querySelector('svg')).toBeInTheDocument()
   })
 
