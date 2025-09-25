@@ -3,7 +3,7 @@ import { Button } from './ui/button'
 import { useTheme } from '../hooks/useTheme'
 
 export function ThemeToggle() {
-  const { theme, actualTheme, setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
 
   const toggleTheme = () => {
     // Cycle through: system -> light -> dark -> system
