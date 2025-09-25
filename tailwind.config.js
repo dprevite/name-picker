@@ -12,7 +12,7 @@ export default {
         'bounce-in': 'bounceIn 0.6s ease-out',
         'fade-in': 'fadeIn 0.3s ease-in-out',
         'grow-circle': 'growCircle 0.8s ease-out forwards',
-        'bounce-and-grow': 'bounceAndGrow 0.8s ease-out forwards',
+        'bounce-and-grow': 'bounceAndGrow 3s ease-out forwards',
       },
       keyframes: {
         bounceIn: {
