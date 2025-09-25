@@ -92,20 +92,20 @@ test.describe('Dark Mode Functionality', () => {
     // Verify dark mode styles are applied
     await expect(page.locator('html')).toHaveClass(/dark/);
 
-    // Check main background colors
+    // Check that CSS variables are being used
     const mainBg = page.locator('div.min-h-screen'); // Main container
-    await expect(mainBg).toHaveClass(/dark:bg-gray-900/);
+    await expect(mainBg).toHaveClass(/bg-background/);
 
-    // Check sidebar background
+    // Check sidebar uses CSS variables
     const sidebar = page.locator('.w-80');
-    await expect(sidebar).toHaveClass(/dark:bg-gray-800/);
+    await expect(sidebar).toHaveClass(/bg-card/);
 
-    // Check text colors
+    // Check text uses CSS variables
     const mainTitle = page.getByRole('heading', { name: 'Name Shuffle' });
-    await expect(mainTitle).toHaveClass(/dark:text-gray-200/);
+    await expect(mainTitle).toHaveClass(/text-foreground/);
 
     const sidebarTitle = page.getByRole('heading', { name: 'Names' });
-    await expect(sidebarTitle).toHaveClass(/dark:text-gray-200/);
+    await expect(sidebarTitle).toHaveClass(/text-card-foreground/);
   });
 
   test('should maintain dark mode functionality with names persistence', async ({ page }) => {

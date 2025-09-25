@@ -35,11 +35,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       setActualTheme(newActualTheme)
 
       const root = document.documentElement
-      if (newActualTheme === 'dark') {
-        root.classList.add('dark')
-      } else {
-        root.classList.remove('dark')
-      }
+      root.classList.toggle('dark', newActualTheme === 'dark')
     }
 
     updateTheme()

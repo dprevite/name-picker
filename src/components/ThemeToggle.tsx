@@ -9,7 +9,10 @@ export function ThemeToggle() {
     const themeOrder: Array<'light' | 'dark' | 'system'> = ['light', 'dark', 'system']
     const currentIndex = themeOrder.indexOf(theme)
     const nextIndex = (currentIndex + 1) % themeOrder.length
-    setTheme(themeOrder[nextIndex])
+    const nextTheme = themeOrder[nextIndex]
+
+    // Provide immediate visual feedback
+    setTheme(nextTheme)
   }
 
   const getIcon = () => {
@@ -40,7 +43,7 @@ export function ThemeToggle() {
       size="icon"
       onClick={cycleTheme}
       aria-label={getLabel()}
-      className="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-gray-100"
+      className="text-muted-foreground hover:text-foreground"
     >
       {getIcon()}
     </Button>

@@ -111,8 +111,7 @@ describe('ThemeToggle', () => {
     renderThemeToggle()
 
     const button = screen.getByRole('button')
-    expect(button).toHaveClass('text-gray-600', 'hover:text-gray-900')
-    expect(button).toHaveClass('dark:text-gray-400', 'dark:hover:text-gray-100')
+    expect(button).toHaveClass('text-muted-foreground', 'hover:text-foreground')
   })
 
   it('has proper accessibility attributes', () => {
