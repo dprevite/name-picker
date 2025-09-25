@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.0](https://github.com/dprevite/name-picker/compare/v1.0.0...v2.0.0) (2025-09-25)
+
+
+### ⚠ BREAKING CHANGES
+
+* Removes system theme detection, now only supports light/dark
+
+🤖 Generated with [Claude Code](https://claude.ai/code)
+
+Co-Authored-By: Claude <noreply@anthropic.com>
+
+### ✨ Features
+
+* add pre-commit hooks with husky and lint-staged ([00ec9a2](https://github.com/dprevite/name-picker/commit/00ec9a26e516991dbd0a706d897589c2bea2a085))
+* simplify theme system to light/dark toggle only ([723c6e0](https://github.com/dprevite/name-picker/commit/723c6e0484b0d89c9c1780f7848338419ef0ddf7))
+
+
+### 🐛 Bug Fixes
+
+* remove unused actualTheme variable in ThemeToggle component ([95a806e](https://github.com/dprevite/name-picker/commit/95a806e23eb455ed38921a9f4c7024c89b33cc37))
+* resolve all e2e test failures and enhance theme toggle functionality ([0dfbb48](https://github.com/dprevite/name-picker/commit/0dfbb48e50da62a471a2a388928a8d1519ab4013))
+* resolve sed command error in release workflow and update docker.md ([dafe198](https://github.com/dprevite/name-picker/commit/dafe1986009a62190421b4ab2e1c90f4b2a9505f))
+
+
+### 📚 Documentation
+
+* add comprehensive pre-commit quality check instructions to CLAUDE.md ([abdebf9](https://github.com/dprevite/name-picker/commit/abdebf901042ca8da362de7b7699a00d75c1ef36))
+
 ## 1.0.0 (2025-09-25)
 
 
