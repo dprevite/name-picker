@@ -1,0 +1,27 @@
+# <type>[optional scope]: <description>
+#
+# [optional body]
+#
+# [optional footer(s)]
+#
+# Type can be:
+#   feat     - A new feature (minor version bump)
+#   fix      - A bug fix (patch version bump)
+#   docs     - Documentation only changes (patch version bump)
+#   style    - Changes that don't affect meaning (white-space, formatting, etc)
+#   refactor - Code change that neither fixes a bug nor adds a feature
+#   perf     - Code change that improves performance
+#   test     - Adding missing tests or correcting existing tests
+#   build    - Changes that affect the build system or external dependencies
+#   ci       - Changes to CI configuration files and scripts
+#   chore    - Other changes that don't modify src or test files
+#   revert   - Reverts a previous commit
+#
+# Use BREAKING CHANGE: in footer for major version bump
+#
+# Examples:
+#   feat: add user authentication
+#   fix: resolve memory leak in shuffle animation
+#   feat!: redesign UI layout
+#
+#   BREAKING CHANGE: removed support for old theme system
