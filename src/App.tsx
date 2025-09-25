@@ -183,7 +183,6 @@ function App() {
                 <div className="w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 bg-muted rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto opacity-30">
                   👤
                 </div>
-                <p className="text-2xl md:text-3xl opacity-30">Press shuffle to pick a name!</p>
               </div>
             )}
           </div>

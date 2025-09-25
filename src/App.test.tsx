@@ -59,7 +59,6 @@ describe('App Component', () => {
 
     expect(screen.getByPlaceholderText('Enter a name')).toBeInTheDocument()
     expect(screen.getByText('No names added yet')).toBeInTheDocument()
-    expect(screen.getByText('Press shuffle to pick a name!')).toBeInTheDocument()
   })
 
   it('loads names from localStorage on mount', () => {
@@ -219,8 +218,8 @@ describe('App Component', () => {
     const trashButton = screen.getByRole('button', { name: /trash/i })
     await user.click(trashButton)
 
-    // Should clear the selected person display
-    expect(screen.getByText('Press shuffle to pick a name!')).toBeInTheDocument()
+    // Should clear the selected person display - verify default icon is shown
+    expect(screen.getByText('👤')).toBeInTheDocument()
   })
 
   // Dark Mode Integration Tests
