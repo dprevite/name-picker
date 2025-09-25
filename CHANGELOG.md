@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file. See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## [2.0.1](https://github.com/dprevite/name-picker/compare/v2.0.0...v2.0.1) (2025-09-25)
+
+
+### 🐛 Bug Fixes
+
+* update e2e tests to match simplified light/dark theme system ([a516042](https://github.com/dprevite/name-picker/commit/a5160420d206e84b278a9162d2a3c7bf7892d2dd))
+
 ## [2.0.0](https://github.com/dprevite/name-picker/compare/v1.0.0...v2.0.0) (2025-09-25)
 
 
