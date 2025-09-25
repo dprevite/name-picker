@@ -13,7 +13,7 @@ interface Person {
 
 const COLORS = [
   'bg-red-500',
-  'bg-blue-500', 
+  'bg-blue-500',
   'bg-green-500',
   'bg-yellow-500',
   'bg-purple-500',
@@ -23,7 +23,7 @@ const COLORS = [
   'bg-teal-500',
   'bg-cyan-500',
   'bg-lime-500',
-  'bg-rose-500'
+  'bg-rose-500',
 ]
 
 const ICONS = ['👤', '🧑', '👩', '🧔', '👱', '🧑‍💻', '👨‍💼', '👩‍💼', '🧑‍🎨', '👨‍🔬', '👩‍🔬', '🧑‍⚕️']
@@ -65,7 +65,7 @@ function App() {
         id: crypto.randomUUID(),
         name: newName.trim(),
         color: getRandomColor(),
-        icon: getRandomIcon()
+        icon: getRandomIcon(),
       }
       setPeople([...people, newPerson])
       setNewName('')
@@ -82,15 +82,15 @@ function App() {
 
   const shufflePerson = () => {
     if (people.length === 0) return
-    
+
     setIsShuffling(true)
     setShowResult(false)
-    
+
     setTimeout(() => {
       const randomIndex = Math.floor(Math.random() * people.length)
       setSelectedPerson(people[randomIndex])
       setIsShuffling(false)
-      
+
       setTimeout(() => {
         setShowResult(true)
       }, 100)
@@ -112,13 +112,12 @@ function App() {
 
       {/* Left Column - Names List */}
       <div className="w-80 bg-card border-r border-border p-6">
-
         {/* Add Name Input */}
         <div className="flex gap-2 mb-6">
           <Input
             placeholder="Enter a name"
             value={newName}
-            onChange={(e) => setNewName(e.target.value)}
+            onChange={e => setNewName(e.target.value)}
             onKeyDown={handleKeyDown}
             className="flex-1"
           />
@@ -132,12 +131,14 @@ function App() {
           {people.length === 0 ? (
             <p className="text-muted-foreground text-center py-8">No names added yet</p>
           ) : (
-            people.map((person) => (
+            people.map(person => (
               <div
                 key={person.id}
                 className="flex items-center gap-3 p-3 bg-secondary rounded-lg hover:bg-accent transition-colors animate-fade-in"
               >
-                <div className={`w-8 h-8 ${person.color} rounded-full flex items-center justify-center text-white text-sm`}>
+                <div
+                  className={`w-8 h-8 ${person.color} rounded-full flex items-center justify-center text-white text-sm`}
+                >
                   {person.icon}
                 </div>
                 <span className="flex-1 font-medium text-secondary-foreground">{person.name}</span>
@@ -170,10 +171,14 @@ function App() {
               </div>
             ) : selectedPerson && showResult ? (
               <div className="text-center animate-bounce-in">
-                <div className={`w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 ${selectedPerson.color} rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto shadow-2xl`}>
+                <div
+                  className={`w-40 h-40 md:w-52 md:h-52 lg:w-60 lg:h-60 ${selectedPerson.color} rounded-full flex items-center justify-center text-7xl md:text-8xl lg:text-9xl mb-8 mx-auto shadow-2xl`}
+                >
                   {selectedPerson.icon}
                 </div>
-                <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground">{selectedPerson.name}</p>
+                <p className="text-5xl md:text-6xl lg:text-7xl font-bold text-foreground">
+                  {selectedPerson.name}
+                </p>
               </div>
             ) : (
               <div className="text-center text-muted-foreground">

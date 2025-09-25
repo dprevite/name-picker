@@ -1,9 +1,9 @@
-import { Sun, Moon, Monitor } from 'lucide-react'
+import { Sun, Moon } from 'lucide-react'
 import { Button } from './ui/button'
 import { useTheme } from '../contexts/ThemeContext'
 
 export function ThemeToggle() {
-  const { theme, actualTheme, setTheme } = useTheme()
+  const { actualTheme, setTheme } = useTheme()
 
   const toggleTheme = () => {
     // Simple toggle between light and dark based on current visual appearance

@@ -68,9 +68,9 @@ describe('App Component', () => {
       { id: '2', name: 'Jane', color: 'bg-blue-500', icon: '🧑' },
     ]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
-    
+
     renderAppWithTheme()
-    
+
     expect(screen.getByText('John')).toBeInTheDocument()
     expect(screen.getByText('Jane')).toBeInTheDocument()
     expect(screen.queryByText('No names added yet')).not.toBeInTheDocument()
@@ -80,11 +80,11 @@ describe('App Component', () => {
     localStorageMock.getItem.mockReturnValue(null)
     const user = userEvent.setup()
     renderAppWithTheme()
-    
+
     const input = screen.getByPlaceholderText('Enter a name')
     await user.type(input, 'Alice')
     await user.keyboard('{Enter}')
-    
+
     expect(screen.getByText('Alice')).toBeInTheDocument()
     expect(input).toHaveValue('')
     expect(localStorageMock.setItem).toHaveBeenCalled()
@@ -94,13 +94,13 @@ describe('App Component', () => {
     localStorageMock.getItem.mockReturnValue(null)
     const user = userEvent.setup()
     renderAppWithTheme()
-    
+
     const input = screen.getByPlaceholderText('Enter a name')
     const addButton = screen.getByRole('button', { name: /plus/i })
-    
+
     await user.type(input, 'Bob')
     await user.click(addButton)
-    
+
     expect(screen.getByText('Bob')).toBeInTheDocument()
     expect(input).toHaveValue('')
   })
@@ -109,13 +109,13 @@ describe('App Component', () => {
     localStorageMock.getItem.mockReturnValue(null)
     const user = userEvent.setup()
     renderAppWithTheme()
-    
+
     const input = screen.getByPlaceholderText('Enter a name')
     const addButton = screen.getByRole('button', { name: /plus/i })
-    
+
     await user.type(input, '   ')
     await user.click(addButton)
-    
+
     expect(screen.getByText('No names added yet')).toBeInTheDocument()
   })
 
@@ -127,12 +127,12 @@ describe('App Component', () => {
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     const user = userEvent.setup()
     renderAppWithTheme()
-    
+
     expect(screen.getByText('John')).toBeInTheDocument()
-    
+
     const trashButtons = screen.getAllByRole('button', { name: /trash/i })
     await user.click(trashButtons[0])
-    
+
     expect(screen.queryByText('John')).not.toBeInTheDocument()
     expect(screen.getByText('Jane')).toBeInTheDocument()
   })
@@ -140,19 +140,17 @@ describe('App Component', () => {
   it('shows disabled shuffle button when no names exist', () => {
     localStorageMock.getItem.mockReturnValue(null)
     renderAppWithTheme()
-    
+
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     expect(shuffleButton).toBeDisabled()
     expect(screen.getByText('Add some names to get started')).toBeInTheDocument()
   })
 
   it('enables shuffle button when names exist', () => {
-    const savedNames = [
-      { id: '1', name: 'John', color: 'bg-red-500', icon: '👤' },
-    ]
+    const savedNames = [{ id: '1', name: 'John', color: 'bg-red-500', icon: '👤' }]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     renderAppWithTheme()
-    
+
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     expect(shuffleButton).toBeEnabled()
   })
@@ -165,31 +163,32 @@ describe('App Component', () => {
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     const user = userEvent.setup()
     renderAppWithTheme()
-    
+
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     await user.click(shuffleButton)
-    
+
     expect(screen.getAllByText('Shuffling...')).toHaveLength(2)
     expect(screen.getByText('🎲')).toBeInTheDocument()
     expect(shuffleButton).toBeDisabled()
   })
 
   it('displays a selected name after shuffling completes', async () => {
-    const savedNames = [
-      { id: '1', name: 'John', color: 'bg-red-500', icon: '👤' },
-    ]
+    const savedNames = [{ id: '1', name: 'John', color: 'bg-red-500', icon: '👤' }]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     const user = userEvent.setup()
     renderAppWithTheme()
-    
+
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     await user.click(shuffleButton)
-    
+
     // Wait for shuffling animation to complete
-    await waitFor(() => {
-      expect(screen.queryByText('Shuffling...')).not.toBeInTheDocument()
-    }, { timeout: 3000 })
-    
+    await waitFor(
+      () => {
+        expect(screen.queryByText('Shuffling...')).not.toBeInTheDocument()
+      },
+      { timeout: 3000 }
+    )
+
     // Should show the selected name
     await waitFor(() => {
       expect(screen.getByText('John')).toBeInTheDocument()
@@ -197,25 +196,26 @@ describe('App Component', () => {
   })
 
   it('clears selected person when their name is removed', async () => {
-    const savedNames = [
-      { id: '1', name: 'John', color: 'bg-red-500', icon: '👤' },
-    ]
+    const savedNames = [{ id: '1', name: 'John', color: 'bg-red-500', icon: '👤' }]
     localStorageMock.getItem.mockReturnValue(JSON.stringify(savedNames))
     const user = userEvent.setup()
     renderAppWithTheme()
-    
+
     // First shuffle to select John
     const shuffleButton = screen.getByRole('button', { name: /shuffle/i })
     await user.click(shuffleButton)
-    
-    await waitFor(() => {
-      expect(screen.queryByText('Shuffling...')).not.toBeInTheDocument()
-    }, { timeout: 3000 })
-    
+
+    await waitFor(
+      () => {
+        expect(screen.queryByText('Shuffling...')).not.toBeInTheDocument()
+      },
+      { timeout: 3000 }
+    )
+
     // Now remove John
     const trashButton = screen.getByRole('button', { name: /trash/i })
     await user.click(trashButton)
-    
+
     // Should clear the selected person display
     expect(screen.getByText('Press shuffle to pick a name!')).toBeInTheDocument()
   })
@@ -231,7 +231,7 @@ describe('App Component', () => {
 
   it('allows toggling between light and dark themes', async () => {
     const user = userEvent.setup()
-    localStorageMock.getItem.mockImplementation((key) => {
+    localStorageMock.getItem.mockImplementation(key => {
       if (key === 'theme') return 'light'
       if (key === 'nameShuffle-people') return null
       return null
@@ -251,7 +251,7 @@ describe('App Component', () => {
   })
 
   it('applies dark mode classes when theme is dark', () => {
-    localStorageMock.getItem.mockImplementation((key) => {
+    localStorageMock.getItem.mockImplementation(key => {
       if (key === 'theme') return 'dark'
       if (key === 'nameShuffle-people') return null
       return null
@@ -262,7 +262,7 @@ describe('App Component', () => {
   })
 
   it('respects system preference when theme is system', () => {
-    localStorageMock.getItem.mockImplementation((key) => {
+    localStorageMock.getItem.mockImplementation(key => {
       if (key === 'theme') return 'system'
       if (key === 'nameShuffle-people') return null
       return null
